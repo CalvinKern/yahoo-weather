@@ -13,17 +13,20 @@ import com.seakernel.android.yahooweather.model.Forecast;
 
 class ForecastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    // Hold a reference to all the views
     private final TextView mDateView;
     private final TextView mDayView;
     private final TextView mWeatherView;
     private final TextView mLowView;
     private final TextView mHighView;
 
-    public ForecastViewHolder(final View itemView) {
+    ForecastViewHolder(final View itemView) {
         super(itemView);
 
+        // Set the listener
         itemView.setOnClickListener(this);
 
+        // Hold all the views
         mDateView = (TextView) itemView.findViewById(R.id.forecast_date);
         mDayView = (TextView) itemView.findViewById(R.id.forecast_day);
         mWeatherView = (TextView) itemView.findViewById(R.id.forecast_weather);
@@ -31,7 +34,7 @@ class ForecastViewHolder extends RecyclerView.ViewHolder implements View.OnClick
         mHighView = (TextView) itemView.findViewById(R.id.forecast_high);
     }
 
-    public void bindView(final Forecast forecast) {
+    void bindView(final Forecast forecast) {
         mDateView.setText(forecast.getDate());
         mDayView.setText(forecast.getDay());
         mWeatherView.setText(forecast.getText());
@@ -41,6 +44,6 @@ class ForecastViewHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     @Override
     public void onClick(final View v) {
-
+        // TODO: Show more specific weather data?
     }
 }

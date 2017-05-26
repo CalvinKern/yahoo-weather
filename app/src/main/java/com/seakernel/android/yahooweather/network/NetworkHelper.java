@@ -13,8 +13,9 @@ import retrofit2.http.Query;
  * Created by Calvin on 5/26/17.
  * Copyright © 2017 SeaKernel. All rights reserved.
  */
-
 public final class NetworkHelper {
+
+    private static final String DATA_FORMAT = "json";
 
     private static final String BASE_URL = "https://query.yahooapis.com";
     private static final String QUERY_BASE = "v1/public/yql";
@@ -22,6 +23,7 @@ public final class NetworkHelper {
 
     private static final Retrofit mRetrofit;
 
+    // Static constructor to initialize retrofit
     static {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -29,14 +31,22 @@ public final class NetworkHelper {
                 .build();
     }
 
+    /**
+     * A call to load the weather. Defaults to "nome, ak" when no location specified.
+     *
+     * @param callback the callback to give the response to
+     */
     public static void getWeather(final Callback<YahooResponse> callback) {
         final WeatherForecastService service = mRetrofit.create(WeatherForecastService.class);
-        final Call<YahooResponse> weather = service.getWeather(QUERY, "json");
+        final Call<YahooResponse> weather = service.getWeather(QUERY, DATA_FORMAT);
         weather.enqueue(callback);
     }
 
+    /**
+     * Used to make a RESTful API request with Retrofit
+     */
     interface WeatherForecastService {
         @GET(QUERY_BASE)
-        Call<YahooResponse> getWeather(@Query("q") String query, @Query("format") String json);
+        Call<YahooResponse> getWeather(@Query("q") String query, @Query("format") String format);
     }
 }

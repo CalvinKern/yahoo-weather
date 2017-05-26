@@ -23,8 +23,10 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
 
+        // Create recycler adapter
         mAdapter = new ForecastRecyclerAdapter(null);
 
+        // Set up recycler view
         final RecyclerView recycler = (RecyclerView) findViewById(R.id.main_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(mAdapter);
@@ -40,6 +42,8 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Load weather whenever we resume to get the most up to date forecast
         NetworkHelper.getWeather(this);
     }
 
@@ -56,7 +60,8 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
 
     @Override
     public void onFailure(@NonNull final Call<YahooResponse> call, @NonNull final Throwable t) {
-        Toast.makeText(this, "Failed to load weather", Toast.LENGTH_LONG).show();
-        mAdapter.updateForecasts(null);
+        // Report that the weather failed to load
+        Toast.makeText(this, R.string.failed_to_load, Toast.LENGTH_LONG).show();
+        mAdapter.updateForecasts(null); // Clear the forecasts so we show the right thing to the user
     }
 }
