@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  * Copyright © 2017 SeaKernel. All rights reserved.
  */
 
-public class NetworkHelper {
+public final class NetworkHelper {
 
     private static final String BASE_URL = "https://query.yahooapis.com";
     private static final String QUERY_BASE = "v1/public/yql";
@@ -29,7 +29,7 @@ public class NetworkHelper {
                 .build();
     }
 
-    public static void getWeather(Callback<YahooResponse> callback) {
+    public static void getWeather(final Callback<YahooResponse> callback) {
         final WeatherForecastService service = mRetrofit.create(WeatherForecastService.class);
         final Call<YahooResponse> weather = service.getWeather(QUERY, "json");
         weather.enqueue(callback);
