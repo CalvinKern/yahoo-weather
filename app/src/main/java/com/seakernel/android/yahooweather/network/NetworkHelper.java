@@ -19,7 +19,8 @@ public final class NetworkHelper {
 
     private static final String BASE_URL = "https://query.yahooapis.com";
     private static final String QUERY_BASE = "v1/public/yql";
-    private static final String QUERY = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"nome, ak\")";
+    private static final String QUERY = "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")";
+    private static final String DEFAULT_LOCATION = "nome, ak";
 
     private static final Retrofit mRetrofit;
 
@@ -37,8 +38,12 @@ public final class NetworkHelper {
      * @param callback the callback to give the response to
      */
     public static void getWeather(final Callback<YahooResponse> callback) {
+        getWeather(callback, DEFAULT_LOCATION);
+    }
+
+    public static void getWeather(final Callback<YahooResponse> callback, final String location) {
         final WeatherForecastService service = mRetrofit.create(WeatherForecastService.class);
-        final Call<YahooResponse> weather = service.getWeather(QUERY, DATA_FORMAT);
+        final Call<YahooResponse> weather = service.getWeather(String.format(QUERY, location), DATA_FORMAT);
         weather.enqueue(callback);
     }
 
