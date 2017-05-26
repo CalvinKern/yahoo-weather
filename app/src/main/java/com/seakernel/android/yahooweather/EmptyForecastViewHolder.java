@@ -8,9 +8,9 @@ import android.view.View;
  * Copyright © 2017 SeaKernel. All rights reserved.
  */
 
-public class EmptyForecastViewHolder extends RecyclerView.ViewHolder {
+class EmptyForecastViewHolder extends RecyclerView.ViewHolder {
 
-    public EmptyForecastViewHolder(final View itemView) {
+    EmptyForecastViewHolder(final View itemView) {
         super(itemView);
     }
 }
