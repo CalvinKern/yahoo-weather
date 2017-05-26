@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seakernel.android.yahooweather.model.YahooChannel;
+import com.seakernel.android.yahooweather.model.YahooItem;
 import com.seakernel.android.yahooweather.model.YahooResponse;
 import com.seakernel.android.yahooweather.network.NetworkHelper;
 
@@ -77,7 +79,13 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         final YahooResponse yahooResponse = response.body();
         if (yahooResponse != null) {
             try {
-                mAdapter.updateForecasts(yahooResponse.getQuery().getResult().getChannel().getItem().getForecasts());
+                final YahooChannel channel = yahooResponse.getQuery().getResult().getChannel();
+                final YahooItem item = channel.getItem();
+
+                // Show location in title bar edit text and update list
+                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                mSearchView.setText(channel.getLocation().toString());
+                mAdapter.updateForecasts(item.getForecasts());
             } catch (final Exception e) {
                 // We had an error parsing somewhere down the line, so show that we failed to load
                 onFailure(call, e);
@@ -100,11 +108,17 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
 
     @Override
     public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+        // When users hits search, find the new location
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             showLoadingDialog();
             NetworkHelper.getWeather(this, v.getText().toString());
+
+            // Close the keyboard
             final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+            // Clear focus
+            mSearchView.clearFocus();
             return true;
         }
         return false;
