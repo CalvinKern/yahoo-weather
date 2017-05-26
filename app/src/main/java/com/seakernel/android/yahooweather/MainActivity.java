@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements Callback<YahooRes
         } else {
             mAdapter.updateForecasts(null);
         }
-
     }
 
     @Override
