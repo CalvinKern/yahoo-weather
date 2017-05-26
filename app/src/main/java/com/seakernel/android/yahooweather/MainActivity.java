@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.seakernel.android.yahooweather.model.YahooResponse;
+import com.seakernel.android.yahooweather.network.NetworkHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;

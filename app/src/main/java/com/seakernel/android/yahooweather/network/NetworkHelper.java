@@ -1,4 +1,4 @@
-package com.seakernel.android.yahooweather;
+package com.seakernel.android.yahooweather.network;
 
 import com.seakernel.android.yahooweather.model.YahooResponse;
 
