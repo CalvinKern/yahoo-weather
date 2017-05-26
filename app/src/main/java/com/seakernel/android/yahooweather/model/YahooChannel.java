@@ -13,11 +13,23 @@ public class YahooChannel {
     @Expose
     private YahooItem mItem;
 
+    @SerializedName("location")
+    @Expose
+    private Location mLocation;
+
     public YahooItem getItem() {
         return mItem;
     }
 
-    public void setItem(YahooItem item) {
+    public void setItem(final YahooItem item) {
         mItem = item;
+    }
+
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(final Location location) {
+        mLocation = location;
     }
 }

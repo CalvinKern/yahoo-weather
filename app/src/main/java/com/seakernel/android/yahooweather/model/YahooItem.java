@@ -15,11 +15,23 @@ public class YahooItem {
     @Expose
     private List<Forecast> mForecasts;
 
+    @SerializedName("title")
+    @Expose
+    private String mTitle;
+
     public List<Forecast> getForecasts() {
         return mForecasts;
     }
 
-    public void setForecasts(List<Forecast> forecasts) {
+    public void setForecasts(final List<Forecast> forecasts) {
         mForecasts = forecasts;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(final String title) {
+        mTitle = title;
     }
 }
