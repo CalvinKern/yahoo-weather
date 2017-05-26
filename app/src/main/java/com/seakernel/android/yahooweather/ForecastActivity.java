@@ -1,5 +1,6 @@
 package com.seakernel.android.yahooweather;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
 
     private ForecastRecyclerAdapter mAdapter;
     private EditText mSearchView;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         super.onResume();
 
         // Load weather whenever we resume to get the most up to date forecast
+        showLoadingDialog();
         NetworkHelper.getWeather(this);
     }
 
@@ -80,6 +83,8 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         } else {
             mAdapter.updateForecasts(null);
         }
+
+        hideLoadingDialog();
     }
 
     @Override
@@ -87,14 +92,36 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         // Report that the weather failed to load
         Toast.makeText(this, R.string.failed_to_load, Toast.LENGTH_LONG).show();
         mAdapter.updateForecasts(null); // Clear the forecasts so we show the right thing to the user
+
+        hideLoadingDialog();
     }
 
     @Override
     public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+            showLoadingDialog();
             NetworkHelper.getWeather(this, v.getText().toString());
             return true;
         }
         return false;
+    }
+
+    /**
+     * Show a loading dialog (that is cancelable) informing the user we are loading data
+     */
+    private void showLoadingDialog() {
+        if (mDialog == null) {
+            mDialog = new ProgressDialog(this);
+            mDialog.setTitle(R.string.loading_weather);
+            mDialog.setIndeterminate(true);
+        }
+
+        mDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
     }
 }
