@@ -5,6 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seakernel.android.yahooweather.model.YahooResponse;
@@ -14,14 +19,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForecastActivity extends AppCompatActivity implements Callback<YahooResponse> {
+public class ForecastActivity extends AppCompatActivity implements Callback<YahooResponse>, TextView.OnEditorActionListener {
 
     private ForecastRecyclerAdapter mAdapter;
+    private EditText mSearchView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+
+        // Set the toolbar
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Allow user to specify location
+        mSearchView = (EditText) toolbar.findViewById(R.id.main_search);
+        mSearchView.setOnEditorActionListener(this);
 
         // Create recycler adapter
         mAdapter = new ForecastRecyclerAdapter(null);
@@ -37,6 +51,11 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         super.onDestroy();
 
         mAdapter = null; // Clear reference to adapter
+
+        if (mSearchView != null) {
+            mSearchView.setOnEditorActionListener(null);
+            mSearchView = null;
+        }
     }
 
     @Override
@@ -52,7 +71,12 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         // Load weather views
         final YahooResponse yahooResponse = response.body();
         if (yahooResponse != null) {
-            mAdapter.updateForecasts(yahooResponse.getQuery().getResult().getChannel().getItem().getForecasts());
+            try {
+                mAdapter.updateForecasts(yahooResponse.getQuery().getResult().getChannel().getItem().getForecasts());
+            } catch (final Exception e) {
+                // We had an error parsing somewhere down the line, so show that we failed to load
+                onFailure(call, e);
+            }
         } else {
             mAdapter.updateForecasts(null);
         }
@@ -63,5 +87,14 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         // Report that the weather failed to load
         Toast.makeText(this, R.string.failed_to_load, Toast.LENGTH_LONG).show();
         mAdapter.updateForecasts(null); // Clear the forecasts so we show the right thing to the user
+    }
+
+    @Override
+    public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+            NetworkHelper.getWeather(this, v.getText().toString());
+            return true;
+        }
+        return false;
     }
 }
