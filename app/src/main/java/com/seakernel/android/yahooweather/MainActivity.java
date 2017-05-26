@@ -57,6 +57,6 @@ public class MainActivity extends AppCompatActivity implements Callback<YahooRes
     @Override
     public void onFailure(@NonNull final Call<YahooResponse> call, @NonNull final Throwable t) {
         Toast.makeText(this, "Failed to load weather", Toast.LENGTH_LONG).show();
-        // TODO: Show placeholder for no weather
+        mAdapter.updateForecasts(null);
     }
 }
