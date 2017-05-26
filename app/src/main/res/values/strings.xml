@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">YahooWeather</string>
+    <string name="no_data">No weather data</string>
+    <string name="no_data_img_desc">weather icon</string>
 </resources>
