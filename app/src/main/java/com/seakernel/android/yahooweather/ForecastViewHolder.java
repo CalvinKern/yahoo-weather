@@ -14,8 +14,8 @@ import com.seakernel.android.yahooweather.model.Forecast;
 class ForecastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     // Hold a reference to all the views
-    private final TextView mDateView;
     private final TextView mDayView;
+    private final TextView mDateView;
     private final TextView mWeatherView;
     private final TextView mLowView;
     private final TextView mHighView;
@@ -27,19 +27,19 @@ class ForecastViewHolder extends RecyclerView.ViewHolder implements View.OnClick
         itemView.setOnClickListener(this);
 
         // Hold all the views
-        mDateView = (TextView) itemView.findViewById(R.id.forecast_date);
         mDayView = (TextView) itemView.findViewById(R.id.forecast_day);
+        mDateView = (TextView) itemView.findViewById(R.id.forecast_date);
         mWeatherView = (TextView) itemView.findViewById(R.id.forecast_weather);
         mLowView = (TextView) itemView.findViewById(R.id.forecast_low);
         mHighView = (TextView) itemView.findViewById(R.id.forecast_high);
     }
 
     void bindView(final Forecast forecast) {
-        mDateView.setText(forecast.getDate());
         mDayView.setText(forecast.getDay());
+        mDateView.setText(forecast.getDate());
         mWeatherView.setText(forecast.getText());
-        mLowView.setText(forecast.getLow());
-        mHighView.setText(forecast.getHigh());
+        mLowView.setText(itemView.getContext().getString(R.string.degree_weather_format, forecast.getLow()));
+        mHighView.setText(itemView.getContext().getString(R.string.degree_weather_format, forecast.getHigh()));
     }
 
     @Override
