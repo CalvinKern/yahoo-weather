@@ -14,14 +14,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements Callback<YahooResponse> {
+public class ForecastActivity extends AppCompatActivity implements Callback<YahooResponse> {
 
     private ForecastRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_forecast);
 
         mAdapter = new ForecastRecyclerAdapter(null);
 
