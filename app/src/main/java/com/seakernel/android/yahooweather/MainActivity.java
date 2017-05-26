@@ -1,16 +1,35 @@
 package com.seakernel.android.yahooweather;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.seakernel.android.yahooweather.model.YahooResponse;
 
-    String query = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MainActivity extends AppCompatActivity implements Callback<YahooResponse> {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        
+        NetworkHelper.getWeather(this);
+    }
+
+    @Override
+    public void onResponse(@NonNull final Call<YahooResponse> call, @NonNull final Response<YahooResponse> response) {
+        // TODO: Load weather views
+    }
+
+    @Override
+    public void onFailure(@NonNull final Call<YahooResponse> call, @NonNull final Throwable t) {
+        Toast.makeText(this, "Failed to load weather", Toast.LENGTH_LONG).show();
+        // TODO: Show placeholder for no weather
     }
 }
