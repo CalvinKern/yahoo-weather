@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:gravity="start"
             android:text="@string/apache_license"
-            android:linksClickable="true"
+            android:autoLink="web"
             />
 
     </LinearLayout>
