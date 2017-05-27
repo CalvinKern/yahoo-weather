@@ -14,4 +14,22 @@
 
     <!--Used to join the day of the week with the date-->
     <string name="yahoo_date_format">%1$s, %2$s</string>
+
+    <!--Licensing-->
+    <string name="about">About</string>
+    <string name="libraries_used">The following libraries were used to build this app:\nRetrofit2\nRetrofit2:GSON Converter</string>
+    <string name="apache_license">Copyright 2013 Square, In\n\n
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at\n\n
+
+       http://www.apache.org/licenses/LICENSE-2.0
+    \n\n
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</string>
+
 </resources>
