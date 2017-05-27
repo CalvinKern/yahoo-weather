@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -100,6 +102,26 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
             loadWeatherData(mSearchView.getText().toString());
         } else {
             loadWeatherData(null);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_forecast, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_about: {
+                final Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            default: {
+            return super.onOptionsItemSelected(item);
+            }
         }
     }
 
