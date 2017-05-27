@@ -93,6 +93,7 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     /**
+     * Set the state for whether data is loading or not
      *
      * @param isLoading true if waiting for content to load, false if data has been loaded
      */
@@ -102,8 +103,9 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     /**
-     * Update this adapter with the forecasts provided. When null is passed in, the data is cleared
-     * and a placeholder is shown to the user (saying that there is no data).
+     * Update this adapter with the forecasts provided
+     * When null is passed in, the data is cleared and a placeholder is shown to the user
+     * (saying that there is no data).
      *
      * Also updates isLoading to false.
      *

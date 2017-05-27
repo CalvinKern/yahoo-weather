@@ -123,6 +123,11 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         return false;
     }
 
+    /**
+     * Load the weather data and tell the adapter to update its state
+     *
+     * @param location the location to load weather for, can be null
+     */
     private void loadWeatherData(@Nullable final String location) {
         if (mAdapter != null) {
             mAdapter.setIsLoading(true);

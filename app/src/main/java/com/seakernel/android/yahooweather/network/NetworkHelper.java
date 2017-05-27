@@ -33,7 +33,8 @@ public final class NetworkHelper {
     }
 
     /**
-     * A call to load the weather. Defaults to "nome, ak" when no location specified.
+     * A call to load the weather
+     * Defaults to "nome, ak" when no location specified.
      *
      * @param callback the callback to give the response to
      */
