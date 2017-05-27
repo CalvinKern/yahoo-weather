@@ -2,6 +2,7 @@
     <string name="app_name">YahooWeather</string>
     <string name="location_hint">postal OR City, ST</string>
     <string name="loading_weather">Loading weather</string>
+    <string name="powered_by_yahoo">Powered by Yahoo</string>
 
     <!--Error strings-->
     <string name="no_data">No weather data</string>

@@ -1,6 +1,8 @@
 package com.seakernel.android.yahooweather;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -28,6 +31,7 @@ import retrofit2.Response;
 public class ForecastActivity extends AppCompatActivity implements Callback<YahooResponse>, TextView.OnEditorActionListener {
 
     private static final String KEY_LOCATION = "KEY_LOCATION";
+    private static final String YAHOO_ATTRIBUTION_URL = "https://www.yahoo.com/?ilc=401";
 
     private ForecastRecyclerAdapter mAdapter;
     private EditText mSearchView;
@@ -47,6 +51,16 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_LOCATION)) {
             mSearchView.setText(savedInstanceState.getString(KEY_LOCATION));
         }
+
+        // Follow Yahoo API Attribution
+        findViewById(R.id.powered_by_yahoo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(YAHOO_ATTRIBUTION_URL));
+                startActivity(intent);
+            }
+        });
 
         // Create recycler adapter
         mAdapter = new ForecastRecyclerAdapter(null);
