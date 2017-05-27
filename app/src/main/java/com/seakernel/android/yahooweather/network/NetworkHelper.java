@@ -37,10 +37,6 @@ public final class NetworkHelper {
      *
      * @param callback the callback to give the response to
      */
-    public static void getWeather(final Callback<YahooResponse> callback) {
-        getWeather(callback, null);
-    }
-
     public static void getWeather(final Callback<YahooResponse> callback, final String location) {
         final WeatherForecastService service = mRetrofit.create(WeatherForecastService.class);
         final Call<YahooResponse> weather = service.getWeather(String.format(QUERY, location != null ? location : DEFAULT_LOCATION), DATA_FORMAT);

@@ -69,8 +69,7 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         super.onResume();
 
         // Load weather whenever we resume to get the most up to date forecast
-        showLoadingDialog();
-        NetworkHelper.getWeather(this);
+        loadWeatherData(null);
     }
 
     @Override
@@ -110,8 +109,7 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
     public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
         // When users hits search, find the new location
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            showLoadingDialog();
-            NetworkHelper.getWeather(this, v.getText().toString());
+            loadWeatherData(v.getText().toString());
 
             // Close the keyboard
             final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -140,6 +138,10 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
     private void hideLoadingDialog() {
         if (mDialog != null) {
             mDialog.dismiss();
+    private void loadWeatherData(@Nullable final String location) {
+        if (mAdapter != null) {
+            mAdapter.setIsLoading(true);
         }
+        NetworkHelper.getWeather(this, location);
     }
 }
