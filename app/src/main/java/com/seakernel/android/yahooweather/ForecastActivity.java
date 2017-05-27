@@ -2,6 +2,7 @@ package com.seakernel.android.yahooweather;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,8 @@ import retrofit2.Response;
 
 public class ForecastActivity extends AppCompatActivity implements Callback<YahooResponse>, TextView.OnEditorActionListener {
 
+    private static final String KEY_LOCATION = "KEY_LOCATION";
+
     private ForecastRecyclerAdapter mAdapter;
     private EditText mSearchView;
 
@@ -41,6 +44,9 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
         // Allow user to specify location
         mSearchView = (EditText) toolbar.findViewById(R.id.main_search);
         mSearchView.setOnEditorActionListener(this);
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_LOCATION)) {
+            mSearchView.setText(savedInstanceState.getString(KEY_LOCATION));
+        }
 
         // Create recycler adapter
         mAdapter = new ForecastRecyclerAdapter(null);
@@ -64,11 +70,23 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
     }
 
     @Override
+    public void onSaveInstanceState(final Bundle outState, final PersistableBundle outPersistentState) {
+        if (mSearchView != null) {
+            outState.putString(KEY_LOCATION, mSearchView.getText().toString());
+        }
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
         // Load weather whenever we resume to get the most up to date forecast
-        loadWeatherData(null);
+        if (mSearchView != null && mSearchView.getText().length() > 0) {
+            loadWeatherData(mSearchView.getText().toString());
+        } else {
+            loadWeatherData(null);
+        }
     }
 
     @Override
