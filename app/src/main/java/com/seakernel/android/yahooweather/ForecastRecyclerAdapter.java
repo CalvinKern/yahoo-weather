@@ -20,13 +20,15 @@ import java.util.List;
 class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // Use an IntDef for the different view types
-    @IntDef
+    @IntDef({ViewType.NONE, ViewType.LOADING, ViewType.FORECAST})
     @Retention(RetentionPolicy.SOURCE)
     @interface ViewType {
-        int EMPTY = 0;
-        int FORECAST = 1;
+        int NONE = 0;
+        int LOADING = 1;
+        int FORECAST = 2;
     }
 
+    private boolean mIsLoading;
     private List<Forecast> mForecasts; // Keep track of our forecasts
 
     ForecastRecyclerAdapter(final List<Forecast> forecasts) {
@@ -36,8 +38,9 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(final int position) {
-        // If we have no data, return an empty view type, other wise it's a forecast
-        return mForecasts.isEmpty() ? ViewType.EMPTY : ViewType.FORECAST;
+        // Check if we're loading and if the list is empty
+        return mIsLoading ? ViewType.LOADING :
+                mForecasts.isEmpty() ? ViewType.NONE : ViewType.FORECAST;
     }
 
     @Override
@@ -47,8 +50,12 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         // Initialize the holder to the right view holder type
         switch (viewType) {
-            case ViewType.EMPTY: {
+            case ViewType.NONE: {
                 holder = new EmptyForecastViewHolder(inflater.inflate(R.layout.none_forecast_view_holder, parent, false));
+                break;
+            }
+            case ViewType.LOADING: {
+                holder = new EmptyForecastViewHolder(inflater.inflate(R.layout.loading_forecast_view_holder, parent, false));
                 break;
             }
             case ViewType.FORECAST: {
@@ -62,15 +69,16 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if (mForecasts.size() <= position) {
-            return; // Bad forecast position
-        }
-
         switch (getItemViewType(position)) {
-            case ViewType.EMPTY: {
+            case ViewType.LOADING:
+            case ViewType.NONE: {
                 return; // Do nothing for an empty position
             }
             case ViewType.FORECAST: {
+                if (mForecasts.size() <= position) {
+                    return; // Bad forecast position
+                }
+
                 // Update the view holder for the forecast at this position
                 ((ForecastViewHolder) holder).bindView(mForecasts.get(position));
                 break;
@@ -80,18 +88,29 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        // We want to always have at least 1 item (for an empty state)
+        // We want to always have at least 1 item (for an empty/loading state)
         return Math.max(mForecasts.size(), 1);
+    }
+
+    /**
+     *
+     * @param isLoading true if waiting for content to load, false if data has been loaded
+     */
+    void setIsLoading(final boolean isLoading) {
+        mIsLoading = isLoading;
+        notifyDataSetChanged();
     }
 
     /**
      * Update this adapter with the forecasts provided. When null is passed in, the data is cleared
      * and a placeholder is shown to the user (saying that there is no data).
      *
+     * Also updates isLoading to false.
+     *
      * @param updatedForecasts the list of forecasts to use
      */
     void updateForecasts(final List<Forecast> updatedForecasts) {
         mForecasts = updatedForecasts == null ? new ArrayList<Forecast>(0) : new ArrayList<>(updatedForecasts);
-        notifyDataSetChanged();
+        setIsLoading(false);
     }
 }
