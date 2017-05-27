@@ -48,7 +48,7 @@ class ForecastRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         // Initialize the holder to the right view holder type
         switch (viewType) {
             case ViewType.EMPTY: {
-                holder = new EmptyForecastViewHolder(inflater.inflate(R.layout.empty_forecast_view_holder, parent, false));
+                holder = new EmptyForecastViewHolder(inflater.inflate(R.layout.none_forecast_view_holder, parent, false));
                 break;
             }
             case ViewType.FORECAST: {
