@@ -1,9 +1,9 @@
 package com.seakernel.android.yahooweather;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +28,6 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
 
     private ForecastRecyclerAdapter mAdapter;
     private EditText mSearchView;
-    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -83,26 +82,26 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
 
                 // Show location in title bar edit text and update list
                 Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
-                mSearchView.setText(channel.getLocation().toString());
-                mAdapter.updateForecasts(item.getForecasts());
+                if (mSearchView != null) {
+                    mSearchView.setText(channel.getLocation().toString());
+                }
+                if (mAdapter != null) {
+                    mAdapter.updateForecasts(item.getForecasts());
+                }
             } catch (final Exception e) {
                 // We had an error parsing somewhere down the line, so show that we failed to load
                 onFailure(call, e);
             }
         } else {
-            mAdapter.updateForecasts(null);
+            onFailure(call, new Throwable("Invalid response from yahoo: " + response));
         }
-
-        hideLoadingDialog();
     }
 
     @Override
     public void onFailure(@NonNull final Call<YahooResponse> call, @NonNull final Throwable t) {
-        // Report that the weather failed to load
-        Toast.makeText(this, R.string.failed_to_load, Toast.LENGTH_LONG).show();
-        mAdapter.updateForecasts(null); // Clear the forecasts so we show the right thing to the user
-
-        hideLoadingDialog();
+        if (mAdapter != null) {
+            mAdapter.updateForecasts(null); // Clear the forecasts so we show the right thing to the user
+        }
     }
 
     @Override
@@ -116,28 +115,14 @@ public class ForecastActivity extends AppCompatActivity implements Callback<Yaho
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
             // Clear focus
-            mSearchView.clearFocus();
+            if (mSearchView != null) {
+                mSearchView.clearFocus();
+            }
             return true;
         }
         return false;
     }
 
-    /**
-     * Show a loading dialog (that is cancelable) informing the user we are loading data
-     */
-    private void showLoadingDialog() {
-        if (mDialog == null) {
-            mDialog = new ProgressDialog(this);
-            mDialog.setTitle(R.string.loading_weather);
-            mDialog.setIndeterminate(true);
-        }
-
-        mDialog.show();
-    }
-
-    private void hideLoadingDialog() {
-        if (mDialog != null) {
-            mDialog.dismiss();
     private void loadWeatherData(@Nullable final String location) {
         if (mAdapter != null) {
             mAdapter.setIsLoading(true);
