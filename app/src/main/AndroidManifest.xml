@@ -16,6 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ForecastActivity"/>
+        <activity android:name=".AboutActivity" android:label="@string/about"/>
 
         <activity-alias
             android:name="launcher"
